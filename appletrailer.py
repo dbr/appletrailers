@@ -26,7 +26,7 @@ class Trailers(list):
             "720" : "http://www.apple.com/trailers/home/xml/current_720p.xml",
         }
         
-        if not res in self.res_lookup:
+        if res not in self.res_lookup:
             raise ValueError("Invalid resolution \"%s\". Select from: %s" % (
                 res, ", ".join(self.res_lookup.keys())
             ))
