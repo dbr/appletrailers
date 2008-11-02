@@ -1,3 +1,4 @@
+import sys
 import urllib
 from BeautifulSoup import BeautifulSoup
 
@@ -11,10 +12,11 @@ class _Trailer(dict):
 class _TrailerInfo:
     def __init__(self, *args, **kwargs):
         self.__dict__.update( kwargs )
+    
     def __repr__(self):
         return "%s" % (self.__dict__)
 
-class Trailers:
+class Trailers(list):
     def __init__(self, res = "720"):
         self.config = {}
         
@@ -31,11 +33,8 @@ class Trailers:
         
         self.config['trailer_xml_url'] = self.res_lookup[res]
         
-        self.all_movies = self.get_trailers()
-    
-    def __iter__(self):
-        for trailer in self.all_movies:
-            yield trailer
+        # Trailers is a list, so extend it with all the trailers
+        self.extend(self.get_trailers())
     
     def __repr__(self):
         return "<Trailers instance containing %s trailers>" % (len(self.all_movies))
@@ -79,9 +78,38 @@ class Trailers:
             all_movies.append(t)
         return all_movies
         
+import unittest
+class test_appletrailer(unittest.TestCase):
+    def setUp(self):
+        self.all_trailers = Trailers(res = "720")
+    
+    def test_has_trailers(self):
+        self.failUnless(len(self.all_trailers) > 1)
+    
+    def test_get_poster(self):
+        first_poster = self.all_trailers[0].poster.location
+        self.failUnless(first_poster.startswith("http://images.apple.com/moviesxml/s/"))
+    
+    def test_trailer(self):
+        first_trailer_preview = self.all_trailers[0].preview.large
+        self.failUnless(first_trailer_preview.startswith("http://movies.apple.com/movies/"))
 
 def main():
-    """Simply lists"""
+    """Simply lists title/poster URL/actors/trailer link for all posters"""
+    if len(sys.argv) >= 1 and "--test" in sys.argv:
+        suite = unittest.TestSuite()
+        suite.addTests(
+            unittest.TestLoader().loadTestsFromTestCase(
+                test_appletrailer
+            )
+        )
+        runner = unittest.TextTestRunner(verbosity = 2)
+        results = runner.run(suite)
+        if len(results.failures) > 0 or len(results.errors) > 0:
+            sys.exit(1)
+        else:
+            sys.exit(0)
+    
     all_trailers = Trailers(res = "720")
     for trailer in all_trailers:
         print "Title:", trailer.info.title
