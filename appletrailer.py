@@ -37,12 +37,15 @@ class Trailers(list):
         self.extend(self.get_trailers())
     
     def __repr__(self):
-        return "<Trailers instance containing %s trailers>" % (len(self.all_movies))
+        return "<Trailers instance containing %s trailers>" % (len(self))
     
     def search(self, search_term):
-        for trailer in self.all_movies:
-            if str(trailer.info.title).lower().find(search_term) > -1:
-                return trailer
+        return [trailer for
+                trailer in self
+                if str(trailer.info.title).lower().find(
+                    str(search_term).lower()
+                ) > -1
+               ]
     
     def _get_source_soup(self, url):
         src = urllib.urlopen(url).read()
@@ -120,3 +123,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
