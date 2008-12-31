@@ -9,7 +9,7 @@ class _Trailer(dict):
     def __repr__(self):
         return "<Trailer \"%s\">" % (self.__dict__['info'].title)
 
-class _TrailerInfo:
+class _TrailerInfo(dict):
     def __init__(self, *args, **kwargs):
         self.__dict__.update( kwargs )
     
@@ -83,8 +83,12 @@ class Trailers(list):
         
 import unittest
 class test_appletrailer(unittest.TestCase):
+    all_trailers = None
     def setUp(self):
-        self.all_trailers = Trailers(res = "720")
+        if self.all_trailers is None:
+            # Only initialise all_trailers once
+            self.__class__.all_trailers = Trailers(res = "720")
+        
     
     def test_has_trailers(self):
         self.failUnless(len(self.all_trailers) > 1)
@@ -98,7 +102,7 @@ class test_appletrailer(unittest.TestCase):
         self.failUnless(first_trailer_preview.startswith("http://movies.apple.com/movies/"))
 
 def main():
-    """Simply lists title/poster URL/actors/trailer link for all posters"""
+    """Runs unittests, or simply lists title/poster URL/actors/trailer link for all trailers"""
     if len(sys.argv) >= 1 and "--test" in sys.argv:
         suite = unittest.TestSuite()
         suite.addTests(
@@ -112,6 +116,7 @@ def main():
             sys.exit(1)
         else:
             sys.exit(0)
+    #end if test
     
     all_trailers = Trailers(res = "720")
     for trailer in all_trailers:
@@ -123,4 +128,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
