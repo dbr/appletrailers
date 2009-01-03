@@ -17,14 +17,13 @@ class _TrailerInfo(dict):
         return "%s" % (self.__dict__)
 
 class Trailers(list):
+    res_lookup = {
+        "default" : "http://www.apple.com/trailers/home/xml/current.xml",
+        "480" : "http://www.apple.com/trailers/home/xml/current_480p.xml",
+        "720" : "http://www.apple.com/trailers/home/xml/current_720p.xml",
+    }
     def __init__(self, res = "720"):
         self.config = {}
-        
-        self.res_lookup = {
-            "default" : "http://www.apple.com/trailers/home/xml/current.xml",
-            "480" : "http://www.apple.com/trailers/home/xml/current_480p.xml",
-            "720" : "http://www.apple.com/trailers/home/xml/current_720p.xml",
-        }
         
         if res not in self.res_lookup:
             raise ValueError("Invalid resolution \"%s\". Select from: %s" % (
