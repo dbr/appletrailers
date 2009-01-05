@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+#encoding:utf-8
+#author:dbr/Ben
+#project:appletrailers
+#repository:http://github.com/dbr/appletrailers
+#license:Creative Commons GNU GPL v2
+# (http://creativecommons.org/licenses/GPL/2.0/)
+
 import sys
 import urllib
 from BeautifulSoup import BeautifulSoup
