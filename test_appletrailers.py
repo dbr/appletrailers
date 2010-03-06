@@ -15,11 +15,11 @@ class test_appletrailer(unittest.TestCase):
     
     def test_get_poster(self):
         first_poster = self.all_trailers[0].poster.location
-        self.failUnless(first_poster.startswith("http://images.apple.com/moviesxml/s/"))
+        self.failUnless(first_poster.startswith("http://trailers.apple.com/trailers/"))
     
     def test_trailer(self):
         first_trailer_preview = self.all_trailers[0].preview.large
-        self.failUnless(first_trailer_preview.startswith("http://movies.apple.com/movies/"))
+        self.failUnless(first_trailer_preview.startswith("http://trailers.apple.com/movies/"))
 
 def main():
     """Runs unittests, or simply lists title/poster URL/actors/trailer link for all trailers"""
