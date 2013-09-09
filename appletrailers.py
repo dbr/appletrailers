@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-#encoding:utf-8
-#author:dbr/Ben
-#project:appletrailers
-#repository:http://github.com/dbr/appletrailers
-#license:Creative Commons GNU GPL v2
-# (http://creativecommons.org/licenses/GPL/2.0/)
 
 import sys
-import urllib
-from BeautifulSoup import BeautifulSoup
+PY2 = sys.version_info.major == 2
+
+if PY2:
+    from urllib import urlopen
+else:
+    from urllib.request import urlopen
+
+from bs4 import BeautifulSoup
+
 
 class _Trailer(dict):
     def __init__(self, *args, **kwargs):
@@ -55,7 +56,7 @@ class Trailers(list):
                ]
     
     def _get_source_soup(self, url):
-        src = urllib.urlopen(url).read()
+        src = urlopen(url).read()
         soup = BeautifulSoup(src)
         return soup
     
@@ -92,11 +93,11 @@ class Trailers(list):
 def main():
     all_trailers = Trailers(res = "720")
     for trailer in all_trailers:
-        print "Title:", trailer.info.title
-        print "Poster:", trailer.poster.location
-        print "Actors:", ", ".join(trailer.cast)
-        print "Trailer:", trailer.preview.large
-        print "*"*24
+        print("Title: %s" % trailer.info.title)
+        print("Poster: %s" % trailer.poster.location)
+        print("Actors: %s" % ", ".join(trailer.cast))
+        print("Trailer: %s" % trailer.preview.large)
+        print("*"*24)
 
 if __name__ == '__main__':
     main()
