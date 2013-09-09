@@ -7,6 +7,6 @@ python:
   - 3.2
   - 3.3
 
-install: pip install --upgrade 'pytest'
+install: pip install --upgrade 'pytest' beautifulsoup4
 
 script: py.test
