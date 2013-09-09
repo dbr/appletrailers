@@ -14,16 +14,18 @@ from bs4 import BeautifulSoup
 class _Trailer(dict):
     def __init__(self, *args, **kwargs):
         self.__dict__.update( kwargs )
-    
+
     def __repr__(self):
         return "<Trailer \"%s\">" % (self.__dict__['info'].title)
+
 
 class _TrailerInfo(dict):
     def __init__(self, *args, **kwargs):
         self.__dict__.update( kwargs )
-    
+
     def __repr__(self):
         return "%s" % (self.__dict__)
+
 
 class Trailers(list):
     res_lookup = {
@@ -31,22 +33,23 @@ class Trailers(list):
         "480" : "http://www.apple.com/trailers/home/xml/current_480p.xml",
         "720" : "http://www.apple.com/trailers/home/xml/current_720p.xml",
     }
+
     def __init__(self, res = "720"):
         self.config = {}
-        
+
         if res not in self.res_lookup:
             raise ValueError("Invalid resolution \"%s\". Select from: %s" % (
                 res, ", ".join(self.res_lookup.keys())
             ))
-        
+
         self.config['trailer_xml_url'] = self.res_lookup[res]
-        
+
         # Trailers is a list, so extend it with all the trailers
         self.extend(self.get_trailers())
-    
+
     def __repr__(self):
         return "<Trailers instance containing %s trailers>" % (len(self))
-    
+
     def search(self, search_term):
         return [trailer for
                 trailer in self
@@ -54,12 +57,12 @@ class Trailers(list):
                     str(search_term).lower()
                 ) > -1
                ]
-    
+
     def _get_source_soup(self, url):
         src = urlopen(url).read()
         soup = BeautifulSoup(src)
         return soup
-    
+
     def _parse_list(self, insoup):
         ret = []
         if insoup is None:
@@ -67,14 +70,14 @@ class Trailers(list):
         for cmem in insoup:
             ret.append(cmem.string)
         return ret
-    
+
     def _parse_dict(self, insoup):
         ret = {}
         for celement in insoup.findChildren():
             ret[str(celement.name)] = celement.string
         ti = _TrailerInfo(**ret)
         return ti
-    
+
     def get_trailers(self):
         soup = self._get_source_soup(self.config['trailer_xml_url'])
         all_movies = []

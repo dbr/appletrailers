@@ -3,6 +3,7 @@ import unittest
 
 import appletrailers
 
+
 class test_appletrailer(unittest.TestCase):
     all_trailers = None
     def setUp(self):
@@ -21,6 +22,7 @@ class test_appletrailer(unittest.TestCase):
         first_trailer_preview = self.all_trailers[0].preview.large
         self.failUnless(first_trailer_preview.startswith("http://trailers.apple.com/movies/"))
 
+
 def main():
     """Runs unittests, or simply lists title/poster URL/actors/trailer link for all trailers"""
     suite = unittest.TestSuite()
@@ -35,6 +37,7 @@ def main():
         sys.exit(1)
     else:
         sys.exit(0)
+
     
 if __name__ == '__main__':
     main()
